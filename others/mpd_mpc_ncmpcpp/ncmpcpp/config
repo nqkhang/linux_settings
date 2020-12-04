@@ -1,0 +1,51 @@
+# Files
+lyrics_directory  = "~/.config/ncmpcpp/lyrics"
+ncmpcpp_directory = "~/.config/ncmpcpp"
+
+# MPD
+mpd_music_dir = "~/Music"
+mpd_host = "127.0.0.1"
+mpd_port = "6600"
+mpd_connection_timeout = "5"
+mpd_crossfade_time = "5"
+
+# Interface
+user_interface = "alternative"
+message_delay_time = "3"
+browser_display_mode = "columns"
+search_engine_display_mode = "columns"
+autocenter_mode = "yes"
+centered_cursor = "yes"
+locked_screen_width_part = "60"
+display_bitrate = "yes"
+external_editor = "vim"
+use_console_editor = "yes"
+
+# Color
+header_window_color = "cyan"
+volume_color = "red"
+state_line_color = "yellow"
+state_flags_color = "red"
+progressbar_color = "yellow"
+statusbar_color = "cyan"
+visualizer_color = "52, 51, 50, 49, 48"
+
+# Visualizer
+visualizer_fifo_path = "/tmp/mpd.fifo"
+visualizer_in_stereo = "yes"
+visualizer_output_name = "MyFIFO"
+visualizer_sync_interval = "30"
+#visualizer_type = "wave"
+#visualizer_type = "wave_filled"
+#visualizer_type = "ellipse"
+visualizer_type = "spectrum"
+visualizer_look = "●▮"
+
+# Playlist
+playlist_shorten_total_times = "yes"
+playlist_display_mode = "columns"
+playlist_editor_display_mode = "columns"
+
+# Lyrics
+follow_now_playing_lyrics = "yes"
+fetch_lyrics_for_current_song_in_background = "yes"

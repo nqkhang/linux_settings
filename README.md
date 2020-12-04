@@ -1,88 +1,119 @@
-# Linux settings (how to use)
+# Linux settings
+
+Some linux settings I have been collecting.
+<p align="center">
+  <img src="demo.gif">
+</p>
+
+
+## 0. Fonts configuration (Optional)
+
+This is to display glyphs and breadcrumbs for Neovim and Tmux correctly. Visit [here](https://www.nerdfonts.com/#home) for more information. My favorite ones are [FiraCode](https://github.com/tonsky/FiraCode/releases/download/2/FiraCode_2.zip) and [SauceCode Pro](https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/SourceCodePro.zip) (also included in `fonts` directory).
+
+```bash
+mkdir -p ~/.local/share/fonts
+cp ./fonts/* ~/.local/share/fonts
 ```
-cd
+
+You then may have to configure the font for your preferred terminal manually.
+
+## 1. Auto installation (required sudo)
+
+This is to install everything automatically. However, I recommend to open the installation files and execute only necessary sections. Some installation guides are also given here.
+
+Installation:
+
+```bash
 git clone https://github.com/knmac/linux_settings.git
-cp linux_settings/vimrc/* .
-cp linux_settings/tmux/* .
-rm -r linux_settings
+cd linux_settings
+sudo sh ./install_auto.sh
 ```
 
+## 2. NeoVim
 
-# vimrc's installation guide
-## Required packages
-```
-sudo apt-get install curl vim exuberant-ctags git ack-grep
-sudo pip install pep8 flake8 pyflakes isort yapf
-```
+### 2.1. Installation
 
-## Cheatsheet
-Some self-defined shortcuts (in normal mode)
-* Open todo list: F2
-* Navigate between files and folders: F3
-* Navigate between functions: F8
-* Open error list: F9
-* Open tab manager: tl
-* Quick command: \ci
-* Go to definition: ,d
-* Go to assignment: ,a
-* Find occurences: ,o
-* Auto complete (in editor mode): Ctrl + space
-* Search files: Ctrl + P
+Install NeoVim dependencies:
 
-Some useful vim shortcuts:
-* Line navigation:
-    * h, j, k, l: left, down, up, right
-    * 0, $: start / end of current line
-    * ^, g\_: non-blank start / end of current line
-* Text navigation:
-    * w, b: next / previous beginning of a word
-    * e: end of a word
-* Screen navigation:
-    * gg, G: first / last line
-    * nG (or :n): go to n'th line
-    * Ctrl-U, Ctrl-D: half-page up / down
-* Search navigation:
-    * :/[pattern]: search for pattern
-    * n, N: next / previous matching pattern
-* Window navigation:
-    * :split: horizontal split
-    * :vsplit: vertical split
-    * Ctrl+w [h/j/k/l]: move to left/ down/ up/ right window
-* Code folding:
-    * za: toggle folding
-* Open multiple files with buffer: (can be combined with NERDTree and CtrlP)
-    * :badd [filename]: open file in new buffer
-    * :bn: next buffer
-    * :bp: previous buffer
-    * :bd: delete buffer
-    * :ls: list all buffer
-    * :b [number / filename]: go to that buffer
-
-
-# tmux 2.4's installation guide
-## Install from source (filename and link may change over time)
-```
-sudo apt-get update
-sudo apt-get install -y libevent-dev libncurses-dev make
-wget https://github.com/tmux/tmux/releases/download/2.4/tmux-2.4.tar.gz
-tar xvzf tmux-2.4.tar.gz
-cd tmux-2.4/
-./configure && make
-sudo make install
+```bash
+sudo apt install python3-dev python3-pip curl exuberant-ctags shellcheck
+pip3 install --user pynvim neovim flake8 msgpack
 ```
 
-## Cheat sheet
-(After pressing Ctrl - b)
-* Mouse mode: m
-* Split veritcally: |
-* Split horizontally: -
-* Create new window: c
-* Kill pane: x
-* Kill window: &
-* Navigate, resize: use your mouse :)
-* Copy mode:
-  * Start copy mode: Ctrl-b Enter
-  * Select with mouse
-  * Paste from buffer: Ctrl-b p
-  * List buffer: Ctrl-b b
-  * Choose buffer: Ctrl-b P
+[Optional] Install NodeJS (locally) for Coc.nvim. Change the URL accordingly. See [this](https://github.com/neoclide/coc.nvim) for more information about Coc.
+
+If you do not want to use Coc and NodeJS, change the variable `use_coc` to 0 at the beginning of `init.nvim` and ignore this step.
+
+```bash
+wget https://nodejs.org/dist/v12.18.3/node-v12.18.3-linux-x64.tar.xz
+tar xvf node-v12.18.3-linux-x64.tar.xz
+rm node-v12.18.3-linux-x64.tar.xz
+mv tar xvf node-v12.18.3-linux-x64.tar.xz ~/.local
+export PATH="$HOME/.local/node-v12.18.3-linux-x64/bin:$PATH" >> ~/.zshrc
+```
+
+Install NeoVim with my configuration:
+
+```bash
+sudo add-apt-repository ppa:neovim-ppa/stable
+sudo apt update
+sudo apt install neovim
+mkdir -p "$HOME/.config/nvim"
+cp -r nvim/* "$HOME/.config/nvim"
+nvim
+```
+
+If you see this error (usually seen when run neovim in a virtual environment):
+`[deoplete] deoplete failed to load. Try the :UpdateRemotePlugins command and restart Neovim. See also :checkhealth.`. 
+Follow these steps:
+
+1. Install/upgrade some packages:
+```bash
+pip install --user --upgrade pynvim
+pip3 install --user --upgrade pynvim
+```
+2. Then open Neovim and run:
+```
+:UpdateRemotePlugins
+```
+
+### 2.2. Cheatsheet
+
+[Neovim cheatsheet](nvim_cheatsheet.md)
+
+
+## 3. Tmux
+
+### 3.1. Building from source
+
+Change the versions, URLs, and paths accordingly in `install_tmux.sh`. The configuration is customized from [here](https://github.com/gpakosz/.tmux).
+
+Then add these two lines in your `.bashrc` or `.zshrc`:
+
+```bash
+export PATH="$HOME/.local/bin":$PATH
+export LD_LIBRARY_PATH="$HOME/.local/lib":$LD_LIBRARY_PATH
+```
+
+### 3.2. Cheatsheet
+
+[Tmux cheatsheet](tmux_cheatsheet.md)
+
+## 4. Some other tools that I like
+
+(You may look in `others` directory for more information about my configuration.)
+
+- Terminal: `kitty`
+- File manager: `ranger-fm` (with `ueberzug` for image preview method)
+- List contents in tree-like format: `tree`
+- File searcher: `rg` (ripgrep - improved version of `grep`)
+- File preview with syntax highlighting: `bat`
+- Interactive process viewer: `htop`
+- Bandwidth monitor and rate esimator: `bmon`
+- System info viewer: `neofetch`
+- Document converter: `pandoc`
+- Video converter: `ffmpeg`
+- Web browser and pager: `w3m`
+- Email client: `neomutt`
+- Music player client: `ncmpcpp`, `mpd`, `mpc` [moreinfo](https://computingforgeeks.com/how-to-configure-mpd-and-ncmpcpp-on-linux/)
+- PDF reader: `zathura`
