@@ -107,10 +107,15 @@ Plug 'lervag/vimtex'
 Plug 'plasticboy/vim-markdown'
 Plug 'godlygeek/tabular'
 
+Plug 'voldikss/vim-floaterm'
+
 " File type icons
 if use_fancy_symbols
     Plug 'ryanoasis/vim-devicons'
 endif
+
+" Startup page and session manager
+Plug 'mhinz/vim-startify'
 
 " Tell vim-plug we finished declaring plugins, so it can load them
 call plug#end()
@@ -176,13 +181,15 @@ highlight Cursor     guibg=#626262
 highlight Normal     guibg=NONE ctermbg=NONE
 " Clear highlight on sign column
 highlight clear SignColumn
+" Italic comments
+highlight Comment    cterm=italic gui=italic
 "highlight SignColumn guibg=black
 "highlight LineNr     guifg=grey guibg=black
 
 filetype indent on      " load filetype-specific indent files
 filetype plugin on      " detect the type of file when the it's created/opened
 
-let g:semshi#excluded_hl_groups = ['local', 'builtin']
+"let g:semshi#excluded_hl_groups = ['local', 'builtin']
 
 
 " ----------------------------------------------------------------------------
@@ -324,6 +331,11 @@ endif
 " ----------------------------------------------------------------------------
 " Run the make file
 nnoremap <F10> :make<CR>
+
+
+" ----------------------------------------------------------------------------
+" Toggle Float-term
+let g:floaterm_keymap_toggle = '<F12>'
 
 
 " ----------------------------------------------------------------------------
@@ -702,6 +714,15 @@ endfunction
 
 nnoremap <leader>- :call FillLine('-')<CR>
 nnoremap <leader>= :call FillLine('=')<CR>
+
+
+" ----------------------------------------------------------------------------
+" Startify
+let g:startify_session_dir = '~/.config/nvim/session'
+
+" Update session automatically as you exit vim
+let g:startify_session_persistence = 1
+
 
 " ----------------------------------------------------------------------------
 " Custom snippets
