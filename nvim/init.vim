@@ -9,7 +9,7 @@ let vim_plug_just_installed = 0
 let vim_plug_path = expand('~/.config/nvim/autoload/plug.vim')
 if !filereadable(vim_plug_path)
     echo "Installing Vim-plug..."
-	echo ""
+    echo ""
     silent !mkdir -p ~/.config/nvim/autoload
     silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
     let vim_plug_just_installed = 1
@@ -29,9 +29,6 @@ endif
 " this needs to be here, so vim-plug knows we are declaring the plugins we
 " want to use
 call plug#begin('~/.config/nvim/plugged')
-
-" Better file browser
-Plug 'scrooloose/nerdtree'
 
 " Code commenter
 Plug 'scrooloose/nerdcommenter'
@@ -58,6 +55,9 @@ Plug 'vim-airline/vim-airline-themes'
 if use_coc
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
 else
+    " File explorer
+    Plug 'scrooloose/nerdtree'
+
     " Linters
     Plug 'dense-analysis/ale'
 
@@ -169,6 +169,8 @@ set lazyredraw                  " redraw only when we need to
 set showmatch                   " highlight matching [{()}]
 set backspace=indent,eol,start  " resolve the problem of backspace not working
 set path+=**                    " provide tab-completion for file-related tasks
+set list
+set listchars=tab:>-
 
 " set cursor shape (nvim >= 0.2) (unnecessary for later nvim)
 "set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor
@@ -255,20 +257,22 @@ nnoremap <F2> :TaskList<CR>
 
 " ----------------------------------------------------------------------------
 " Nerd tree
-nnoremap <F3> :NERDTreeToggle<CR>
-" open nerdtree with the current file selected
-nnoremap ,t :NERDTreeFind<CR>
-" don't show these file types
-let NERDTreeIgnore = ['\.pyc$', '\.pyo$', '__pycache__']
+if !use_coc
+    nnoremap <F3> :NERDTreeToggle<CR>
+    " open nerdtree with the current file selected
+    nnoremap ,t :NERDTreeFind<CR>
+    " don't show these file types
+    let NERDTreeIgnore = ['\.pyc$', '\.pyo$', '__pycache__']
 
-" Autorefresh on tree focus
-function! NERDTreeRefresh()
-    if &filetype == "nerdtree"
-        silent exe substitute(mapcheck("R"), "<CR>", "", "")
-    endif
-endfunction
+    " Autorefresh on tree focus
+    function! NERDTreeRefresh()
+        if &filetype == "nerdtree"
+            silent exe substitute(mapcheck("R"), "<CR>", "", "")
+        endif
+    endfunction
 
-autocmd BufEnter * call NERDTreeRefresh()
+    autocmd BufEnter * call NERDTreeRefresh()
+endif
 
 
 " ----------------------------------------------------------------------------
@@ -350,21 +354,6 @@ if !exists('g:airline_symbols')
     let g:airline_symbols = {}
 endif
 
-" unicode symbols
-"let g:airline_left_sep = '»'
-"let g:airline_left_sep = '▶'
-"let g:airline_right_sep = '«'
-"let g:airline_right_sep = '◀'
-"let g:airline_symbols.linenr = '␊'
-"let g:airline_symbols.linenr = '␤'
-"let g:airline_symbols.linenr = '¶'
-"let g:airline_symbols.branch = '⎇'
-"let g:airline_symbols.branch = ''
-"let g:airline_symbols.paste = 'ρ'
-"let g:airline_symbols.paste = 'Þ'
-"let g:airline_symbols.paste = '∥'
-"let g:airline_symbols.whitespace = 'Ξ'
-
 " airline symbols
 if use_fancy_symbols
     let g:airline_left_sep           = ''
@@ -407,7 +396,9 @@ if use_coc
         \ 'coc-html',
         \ 'coc-css',
         \ 'coc-sh',
-        \ 'coc-marketplace'
+        \ 'coc-clangd',
+        \ 'coc-marketplace',
+        \ 'coc-explorer'
         \ ]
 
     " TextEdit might fail if hidden is not set.
@@ -560,6 +551,8 @@ if use_coc
     "nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
     "" Resume latest coc list.
     "nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
+
+    nnoremap <silent> <F3> :CocCommand explorer --toggle<CR>
 endif
 
 
